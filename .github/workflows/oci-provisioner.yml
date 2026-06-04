@@ -26,6 +26,20 @@ jobs:
           EOF
           chmod 600 /tmp/oci_private_key.pem
 
+      - name: Debug config
+        run: |
+          echo "Region: $OCI_REGION"
+          echo "User: $OCI_USER_ID"
+          echo "Tenancy: $OCI_TENANCY_ID"
+          echo "Fingerprint: $OCI_KEY_FINGERPRINT"
+          echo "Key file exists: $(test -f /tmp/oci_private_key.pem && echo YES || echo NO)"
+          echo "Key first line: $(head -1 /tmp/oci_private_key.pem)"
+        env:
+          OCI_REGION: ${{ secrets.OCI_REGION }}
+          OCI_USER_ID: ${{ secrets.OCI_USER_ID }}
+          OCI_TENANCY_ID: ${{ secrets.OCI_TENANCY_ID }}
+          OCI_KEY_FINGERPRINT: ${{ secrets.OCI_KEY_FINGERPRINT }}
+
       - name: Run provisioner
         run: php index.php
         env:
